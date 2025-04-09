@@ -1,6 +1,6 @@
 name: "HCL AppScan SAST"
 on:
-  push
+  delete
 jobs:
   scan:
     runs-on: ubuntu-latest
