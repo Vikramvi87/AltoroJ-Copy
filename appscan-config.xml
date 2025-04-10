@@ -1,3 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Configuration enableSecrets="true" secretsOnly="true" staticAnalysisOnly="true">
+  <Targets>
+    <Target path="."/>
+  </Targets>
 </Configuration>
