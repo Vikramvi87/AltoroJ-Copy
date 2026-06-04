@@ -2,8 +2,14 @@
 <%@page import="java.io.InputStream"%>
 <%@page import="java.io.InputStreamReader"%>
 <%@page import="com.ibm.security.appscan.altoromutual.util.ServletUtil"%>
+<%@page import="java.util.regex.Pattern"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%!
+    private boolean isValidInput(String input) {
+         return input != null && !input.matches(".*[;&|].*");
+    }
+%>
 
 <%
 /**
@@ -49,7 +55,10 @@ IBM AltoroJ
 					 String shell = "";
 					 String shellarg = "";
 					 
-	                 if(System.getProperty("os.name").toLowerCase().contains("windows"))
+	                 if(!isValidInput(path) || !isValidInput(content)) {
+                         out.println("Invalid input detected.");
+                         return;
+                     } else if(System.getProperty("os.name").toLowerCase().contains("windows"))
 	                 {
 	                	 shell = "cmd";
 	                	 shellarg = "/c";
