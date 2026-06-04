@@ -16,9 +16,12 @@ import org.apache.wink.json4j.*;
 
 import com.ibm.security.appscan.altoromutual.util.DBUtil;
 import com.ibm.security.appscan.altoromutual.util.ServletUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Path("login")
 public class LoginAPI extends AltoroAPI {
+	private static final Logger logger = LoggerFactory.getLogger(LoginAPI.class);
 
 	@GET
 	// @Path("/login")
@@ -72,7 +75,7 @@ public class LoginAPI extends AltoroAPI {
 			if (e instanceof InvalidParameterException)
 				System.out.println("Invalid user error: " + e.getLocalizedMessage());
 			else
-				e.printStackTrace();
+				logger.error("Internal error occurred.", e);
 			
 			myJson.put("error", e.getLocalizedMessage());
 			return Response.status(400).entity(myJson.toString()).build();
