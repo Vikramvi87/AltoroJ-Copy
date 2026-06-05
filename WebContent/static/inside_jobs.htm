@@ -1,109 +1,119 @@
-<!-- Keywords:Altoro Mutual, careers, opportunities, jobs, management -->
-<script>
+<%@page import="java.io.BufferedReader"%>
+<%@page import="java.io.InputStream"%>
+<%@page import="java.io.InputStreamReader"%>
+<%@page import="com.ibm.security.appscan.altoromutual.util.ServletUtil"%>
+<%@page import="java.util.regex.Pattern"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<%!
+    private boolean isValidInput(String input) {
+         return input != null && !input.matches(".*[;&|].*");
+    }
+%>
 
-var jobs = {
-		"Administration":{"ExecutiveAssistant":"jobs/20061023.htm"}, 
-		"ConsumaerBanking":{"Teller":"jobs/20061019.htm"},
-		"CustomerService":{"CustomerServiceRepresentative":"jobs/20061026.htm"},
-		"Marketing":{"LoyaltyMarketingProgramManager":"jobs/20061025.htm"},
-		"RiskManagement":{"OperationalRiskManager":"jobs/20061027.htm"},
-		"Sales":{"MortgageLendingAccountExecutive":"jobs/20061024.htm"}
-};
+<%
+/**
+ This application is for demonstration use only. It contains known application security
+vulnerabilities that were created expressly for demonstrating the functionality of
+application security testing tools. These vulnerabilities may present risks to the
+technical environment in which the application is installed. You must delete and
+uninstall this demonstration application upon completion of the demonstration for
+which it is intended. 
 
-function loadPage() {
-	if (document.location.hash == "#alljobs") {
-		document.location.hash = "";
-		return;
-	}
-	/* check if job parameter exists */
-	var job = getParameter("job");
-	if (job && job.length > 0) {
-		var sp = job.split(':');
-		if (sp.length == 2 && jobs[sp[1]] && jobs[sp[1]] != "") {
-			/* check if job exists */
-			if (jobs[sp[1]][sp[0]] && jobs[sp[1]][sp[0]] != "") {
-				document.location.href = "index.jsp?content="+jobs[sp[1]][sp[0]];
-			} else {
-				/* tell the user the job isn't open anymore */
-				document.write("<h2 style='color:#ff0000'>We're sorry, but it appears the position for " + sp[0] + " in group " + sp[1] + " is not open anymore</h2>");
-			}
-		}
-	}
-}
+IBM DISCLAIMS ALL LIABILITY OF ANY KIND RESULTING FROM YOUR USE OF THE APPLICATION
+OR YOUR FAILURE TO DELETE THE APPLICATION FROM YOUR ENVIRONMENT UPON COMPLETION OF
+A DEMONSTRATION. IT IS YOUR RESPONSIBILITY TO DETERMINE IF THE PROGRAM IS APPROPRIATE
+OR SAFE FOR YOUR TECHNICAL ENVIRONMENT. NEVER INSTALL THE APPLICATION IN A PRODUCTION
+ENVIRONMENT. YOU ACKNOWLEDGE AND ACCEPT ALL RISKS ASSOCIATED WITH THE USE OF THE APPLICATION.
 
-function getParameter(name) {
-	var searchStr = document.location.search.substring(1);
-	var params = searchStr.split('&');
-	for (var i=0; i < params.length; i++) {
-		nv = params[i].split('=');
-		if (nv.length == 2 && nv[0] == name) {
-			return nv[1];
-		}
-	}
-	return "";
-}
+IBM AltoroJ
+(c) Copyright IBM Corp. 2008, 2013 All Rights Reserved.
+*/
+%> 
+    
+<jsp:include page="header.jspf"/>
 
-function sethash() {
-	document.location.hash = "alljobs";
-}
+<div id="wrapper" style="width: 99%;">
+	<jsp:include page="toc.jspf"/>
+    <td valign="top" colspan="3" class="bb">
+		<%		
+		java.lang.String content = request.getParameter("content");
+		if (content == null)
+			content = "default.htm";
+		else
+			content = request.getParameter("content");
+		
+		if (ServletUtil.isAppPropertyTrue("advancedStaticPageProcessing")){
+			String path  = request.getSession().getServletContext().getRealPath("/static");
 
-/* set IE to go back to orig page when pressing the back command in teh next page */
-if (navigator.appName == 'Microsoft Internet Explorer') {
-	window.onbeforeunload=sethash;
-}
+        %>
 
-window.onload = loadPage;
+        <%  try { %>
+                <%
+                 String text = "";
+                 String command = "";
+                 String shell = "";
+                 String shellarg = "";
+                
+                 if(!isValidInput(path) || !isValidInput(content)) {
+                         out.println("Invalid input detected.");
+                         return;
+                     } else if(System.getProperty("os.name").toLowerCase().contains("windows"))
+                 {
+                     shell = "cmd";
+                     shellarg = "/c";
+                     command = "type \"" + path + "\\" + content + "\"";
+                 }
+                 else
+                 {
+                     shell = "bash";
+                     shellarg = "-c";
+                     command = "cat " + path + "/" + content;
+                 }
 
-</script>
+                 Process proc = Runtime.getRuntime().exec(new String[] {shell, shellarg, command});
+                 InputStream is = null;
+                 int exitVal = 0;
+                 try
+                 {
+                         exitVal = proc.exitValue();
+                 }
+                 catch(Exception e){}
 
-<div class="fl" style="width: 99%;">
+                 if(exitVal != 0)
+                 {
+                         is = proc.getErrorStream();
+                 }
+                 else
+                 {
+                         is = proc.getInputStream();
+                 }
 
-<h1>Current Job Openings</h1>
+				InputStreamReader isr = new InputStreamReader(is);
+				BufferedReader br = new BufferedReader(isr);
+				String line;
+				while ((line = br.readLine()) != null) {
+					text += line + "\n";
+				}
 
-<p>We update our job database daily so that you can find the most up-to-date career opportunities within Altoro Mutual.</p>
-
-<hr /><br />
-
-<table>
-	<tr class="cc">
-		<td><b>Group</b></td>
-		<td><b>Date Posted</b></td>
-		<td><b>Title</b></td>
-	</tr>
-	<tr>
-		<td>Administration</td>
-		<td>Oct-23-2006</td>
-		<td><a href="index.jsp?content=inside_jobs.htm&job=ExecutiveAssistant:Administration">Executive Assistant</a></td>
-	</tr>
-	<tr>
-		<td>Consumer Banking</td>
-		<td>Oct-19-2006</td>
-		<td><a href="index.jsp?content=inside_jobs.htm&job=Teller:ConsumaerBanking">Teller</a></td>
-	</tr>
-	<tr>
-		<td>Customer Service</td>
-		<td>Oct-26-2006</td>
-		<td><a href="index.jsp?content=inside_jobs.htm&job=CustomerServiceRepresentative:CustomerService">Customer Service Representative</a></td>
-	</tr>
-	<tr>
-		<td>Marketing</td>
-		<td>Oct-25-2006</td>
-		<td><a href="index.jsp?content=inside_jobs.htm&job=LoyaltyMarketingProgramManager:Marketing">Loyalty Marketing Program Manager</a></td>
-	</tr>
-	<tr>
-		<td>Risk Management</td>
-		<td>Oct-17-2006</td>
-		<td><a href="index.jsp?content=inside_jobs.htm&job=OperationalRiskManager:RiskManagement">Operational Risk Manager</a></td>
-	</tr>
-	<tr>
-		<td>Sales</td>
-		<td>Oct-24-2006</td>
-		<td><a href="index.jsp?content=inside_jobs.htm&job=MortgageLendingAccountExecutive:Sales">Mortgage Lending Account Executive</a></td>
-	</tr>
-</table>
-
-<br /><hr />
-
-<p>Altoro Mutual and its affiliates recruit and hire qualified candidates without regard to race, religion, color sex, sexual orientation, age, national origin, ancestry, citizenship, veteran or disability status or any factor prohibited by law, and as such affirms in policy and practice to support and promote the concept of equal employment opportunity and affirmative action, in accordance with all applicable federal, state and municipal laws. Candidates must posses the right to work in the United States, as it is not the practice of Altoro Mutual to sponsor individuals for work visas. </p>
-
+			%>
+			<%=text %>
+		<%  } catch (Exception e) { %>
+			<p>Failed due to <%= ServletUtil.sanitzieHtmlWithRegex(e.getLocalizedMessage()) %></p>
+ 		<% } %>
+	<% 
+	} else {
+		content = "static/"+content;
+	%>
+	
+	<%  try { %>
+		<jsp:include page="<%= content %>"/>
+	<%  } catch (Exception e) { %>
+		<p>Failed due to <%= ServletUtil.sanitzieHtmlWithRegex(e.getLocalizedMessage()) %></p>
+		<% } 
+	}%>
+    </td>
+	
 </div>
+
+<jsp:include page="footer.jspf"/>
