@@ -11,7 +11,12 @@
 
     function go() {
 	    var iPos = document.URL.indexOf("url=")+4;
-    	var sDst = document.URL.substring(iPos,document.URL.length); 
+    	var sDst = document.URL.substring(iPos,document.URL.length);
+        // Validate redirection URL against allowed domains
+        if (!sDst.startsWith("https://www.altorobank.com")) { // TODO(developer): Replace "https://www.altorobank.com" with your allowed domain(s)
+            alert("Invalid redirect URL."); // TODO(developer): Replace with appropriate error handling or safe default redirection
+            return;
+        } 
         if (window.opener) {
       		window.opener.location.href = sDst;
       		cl();
