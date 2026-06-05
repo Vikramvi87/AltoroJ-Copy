@@ -2,6 +2,7 @@
 <%@page import="java.io.InputStream"%>
 <%@page import="java.io.InputStreamReader"%>
 <%@page import="com.ibm.security.appscan.altoromutual.util.ServletUtil"%>
+<%@ page import="java.util.regex.Pattern" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 
@@ -39,6 +40,10 @@ IBM AltoroJ
 		
 		if (ServletUtil.isAppPropertyTrue("advancedStaticPageProcessing")){
 			String path  = request.getSession().getServletContext().getRealPath("/static");
+    // Validate 'content' parameter against allowed characters (letters, digits, underscore, hyphen, and period)
+    if (content == null || !content.matches("^[a-zA-Z0-9._-]+$")) {
+        throw new ServletException("Invalid input for content parameter");
+    }
 
 	        %>
 
