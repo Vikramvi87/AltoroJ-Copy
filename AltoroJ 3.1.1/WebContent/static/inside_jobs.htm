@@ -16,7 +16,14 @@ function loadPage() {
 		return;
 	}
 	/* check if job parameter exists */
-	var job = getParameter("job");
+	function encodeHTML(str) {
+    return str.replace(/&/g, "&amp;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;")
+              .replace(/"/g, "&quot;")
+              .replace(/'/g, "&#39;");
+}
+var job = getParameter("job");
 	if (job && job.length > 0) {
 		var sp = job.split(':');
 		if (sp.length == 2 && jobs[sp[1]] && jobs[sp[1]] != "") {
@@ -25,7 +32,7 @@ function loadPage() {
 				document.location.href = "index.jsp?content="+jobs[sp[1]][sp[0]];
 			} else {
 				/* tell the user the job isn't open anymore */
-				document.write("<h2 style='color:#ff0000'>We're sorry, but it appears the position for " + sp[0] + " in group " + sp[1] + " is not open anymore</h2>");
+				document.write("<h2 style='color:#ff0000'>We're sorry, but it appears the position for " + encodeHTML(sp[0]) + " in group " + encodeHTML(sp[1]) + " is not open anymore</h2>");
 			}
 		}
 	}
