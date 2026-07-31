@@ -23,6 +23,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -332,8 +333,19 @@ public class DBUtil {
 				debitAmount = -debitAmount;
 		
 			//create transaction record
-			statement.execute("INSERT INTO TRANSACTIONS (ACCOUNTID, DATE, TYPE, AMOUNT) VALUES ("+debitAccount.getAccountId()+",'"+date+"',"+((debitAccount.getAccountId() == userCC)?"'Cash Advance'":"'Withdrawal'")+","+debitAmount+")," +
-					  "("+creditAccount.getAccountId()+",'"+date+"',"+((creditAccount.getAccountId() == userCC)?"'Payment'":"'Deposit'")+","+creditAmount+")"); 	
+			String sql = "INSERT INTO TRANSACTIONS (ACCOUNTID, DATE, TYPE, AMOUNT) VALUES (?, ?, ?, ?), (?, ?, ?, ?);";
+PreparedStatement pstmt = connection.prepareStatement(sql);
+// Bind parameters for first row
+pstmt.setInt(1, debitAccount.getAccountId());
+pstmt.setString(2, date.toString());
+pstmt.setString(3, (debitAccount.getAccountId() == userCC ? "Cash Advance" : "Withdrawal"));
+pstmt.setDouble(4, debitAmount);
+// Bind parameters for second row
+pstmt.setInt(5, creditAccount.getAccountId());
+pstmt.setString(6, date.toString());
+pstmt.setString(7, (creditAccount.getAccountId() == userCC ? "Payment" : "Deposit"));
+pstmt.setDouble(8, creditAmount);
+pstmt.executeUpdate();
 
 			Log4AltoroJ.getInstance().logTransaction(debitAccount.getAccountId()+" - "+ debitAccount.getAccountName(), creditAccount.getAccountId()+" - "+ creditAccount.getAccountName(), amount);
 			
