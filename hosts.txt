@@ -1,0 +1,39 @@
+# Copyright (c) 1993-2009 Microsoft Corp
+#
+# This is a sample HOSTS file used by Microsoft TCP/IP for Windows.
+#
+# This file contains the mappings of IP addresses to host names. Each
+# entry should be kept on an individual line. The IP address should
+# be placed in the first column followed by the corresponding host name.
+# The IP address and the host name should be separated by at least one
+# space.
+#
+# Additionally, comments (such as these) may be inserted on individual
+# lines or following the machine name denoted by a '#' symbol.
+#
+# For example:
+#
+#      102.54.94.97     rhino.acme.com          # source server
+#       38.25.63.10     x.acme.com              # x client host
+
+# localhost name resolution is handled within DNS itself.
+#	127.0.0.1       localhost
+#	::1             localhost
+
+#127.0.0.1	EC2AMAZ-44NU39T
+127.0.0.1	getpostman.com
+127.0.0.1	postman.co
+127.0.0.1	pstmn.io
+127.0.0.1	postman.com
+127.0.0.1	dl.pstmn.io
+127.0.0.1	sync-v3.getpostman.com
+127.0.0.1	go.pstmn.io  
+192.168.68.18  ASInnovLLS
+192.168.69.95  ip-192-168-69-95.appscan.il
+192.168.69.160	ip-192-168-69-160.ec2.internal
+192.168.69.40 ip-192-168-69-40.appscan.il
+192.168.68.18  ASInnovLLS
+192.168.69.163 ascp.appscan.local
+192.168.69.142 192.168.69.142.appscan.il
+192.168.69.142 ip-192-168-69-142.appscan.il
+192.168.69.237 ip-192-168-69-237.appscan.il
