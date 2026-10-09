@@ -1,8 +1,9 @@
+import os
 import requests
 
 # ASoC credentials
 key_id = "348a6a9b-fb71-7ea0-eb3c-8c54309a07b0"
-key_secret = "9qlHX4P6x+YvGu3/RWUXfhX6ayf1s+TZc41omhUngF5M"
+key_secret = os.getenv("ASOC_KEY_SECRET", "<REPLACE_WITH_SECURE_SECRET>")  # TODO(developer): Replace "<REPLACE_WITH_SECURE_SECRET>" with your secure secret or remove this default in production
 
 # List of application names
 application_names = [
