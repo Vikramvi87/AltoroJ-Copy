@@ -23,6 +23,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -272,8 +273,9 @@ public class DBUtil {
 			return null; 
 		
 		Connection connection = getConnection();
-		Statement statement = connection.createStatement();
-		ResultSet resultSet =statement.executeQuery("SELECT ACCOUNT_ID, ACCOUNT_NAME, BALANCE FROM ACCOUNTS WHERE USERID = '"+ username +"' "); /* BAD - user input should always be sanitized */
+		PreparedStatement pstmt = connection.prepareStatement("SELECT ACCOUNT_ID, ACCOUNT_NAME, BALANCE FROM ACCOUNTS WHERE USERID = ?");
+		pstmt.setString(1, username);
+		ResultSet resultSet = pstmt.executeQuery();
 
 		ArrayList<Account> accounts = new ArrayList<Account>(3);
 		while (resultSet.next()){
