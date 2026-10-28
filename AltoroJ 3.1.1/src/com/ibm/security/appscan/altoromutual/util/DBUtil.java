@@ -23,6 +23,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -447,8 +448,10 @@ public class DBUtil {
 	public static Account getAccount(long accountNo) throws SQLException {
 
 		Connection connection = getConnection();
-		Statement statement = connection.createStatement();
-		ResultSet resultSet =statement.executeQuery("SELECT ACCOUNT_NAME, BALANCE FROM ACCOUNTS WHERE ACCOUNT_ID = "+ accountNo +" "); /* BAD - user input should always be sanitized */
+		// Using PreparedStatement to prevent SQL injection by parameterizing accountNo
+		PreparedStatement pstmt = connection.prepareStatement("SELECT ACCOUNT_NAME, BALANCE FROM ACCOUNTS WHERE ACCOUNT_ID = ?");
+		pstmt.setLong(1, accountNo);
+		ResultSet resultSet = pstmt.executeQuery();  // Using parameterized query to prevent SQL injection; /* BAD - user input should always be sanitized */
 
 		ArrayList<Account> accounts = new ArrayList<Account>(3);
 		while (resultSet.next()){
