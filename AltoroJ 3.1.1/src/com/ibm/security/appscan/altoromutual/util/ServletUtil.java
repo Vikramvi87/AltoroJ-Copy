@@ -30,6 +30,9 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -342,7 +345,8 @@ public class ServletUtil {
 		    return accountCookie;
 		}
 		catch(SQLException e){
-			e.printStackTrace();
+			Logger logger = Logger.getLogger(ServletUtil.class.getName());
+			logger.log(Level.SEVERE, "An unexpected error occurred while processing account information.", e);
 			return null;
 		}
 	}
