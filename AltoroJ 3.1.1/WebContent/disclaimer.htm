@@ -11,7 +11,12 @@
 
     function go() {
 	    var iPos = document.URL.indexOf("url=")+4;
-    	var sDst = document.URL.substring(iPos,document.URL.length); 
+    	var sDst = document.URL.substring(iPos,document.URL.length);
+        // Validate the redirect URL parameter to prevent open redirect vulnerabilities
+        if (!sDst.startsWith('/')) {
+            // If the URL is not a relative path, fallback to a safe default page
+            sDst = '/defaultSafeLocation.htm'; // TODO: Replace with the appropriate safe landing page
+        }
         if (window.opener) {
       		window.opener.location.href = sDst;
       		cl();
